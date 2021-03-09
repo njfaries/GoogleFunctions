@@ -1,4 +1,4 @@
-sing Google.Cloud.Functions.Framework;
+using Google.Cloud.Functions.Framework;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.IO;
@@ -38,10 +38,20 @@ namespace SimpleHttpFunction
                 try
                 {
                     JsonElement json = JsonSerializer.Deserialize<JsonElement>(text);
-                    if (json.TryGetProperty("links.dashboard_download_direct.href", out JsonElement messageElement) &&
-                        messageElement.ValueKind == JsonValueKind.String)
+                    // if (json.TryGetProperty("links.dashboard_download_direct.href", out JsonElement messageElement) &&
+                    //     messageElement.ValueKind == JsonValueKind.String)
+                    // {
+                    //     _logger.LogInformation("TryGet succeeded");
+                    //     message = messageElement.GetString();
+                    // }
+                    if (json.TryGetProperty("buildNumber", out JsonElement messageElement))
                     {
-                        message = messageElement.GetString();
+                        _logger.LogInformation("Got build number");
+                        if (messageElement.ValueKind == JsonValueKind.String)
+                        {
+                            string test = messageElement.GetString();
+                            _logger.LogInformation($"and it's a string! {test}");
+                        }
                     }
                 }
                 catch (JsonException parseException)
