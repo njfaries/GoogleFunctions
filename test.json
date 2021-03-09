@@ -1,0 +1,78 @@
+{
+    "buildNumber": 43,
+    "buildStatus": "success",
+    "buildTargetName": "Default WebGL",
+    "cleanBuild": false,
+    "credentialsOutdated": false,
+    "lastBuiltRevision": "4fba372055670a6bf633321bb4a94eefd973dc55",
+    "links": {
+        "api_self": {
+            "href": "/api/orgs/200427/projects/341ae301-9537-4099-9488-d827ce5e805d/buildtargets/default-webgl/builds/43",
+            "method": "get"
+        },
+        "artifacts": [
+            {
+                "files": [
+                    {
+                        "filename": "addressable_content.zip",
+                        "href": "https://storage.googleapis.com/unitycloud-build-user-svc-live-build/200427%2F341ae301-9537-4099-9488-d827ce5e805d%2Fdefault-webgl-43%2Faddressable_content.zip?GoogleAccessId=signurl-sa%40unity-cs-cloudbuild-prd.iam.gserviceaccount.com&Expires=1614996230&Signature=C%2FuyoFWljKVUyOOwgCbSKgrHs52fI0tYBeH2dog8RvTAjDPqDiH9hs1JycXPWKzCfTuBzSdTNhTmP5ADFcNm6IaBM2Av25yI9ACOOC0fxUcQW96W3M2fx%2BfUhVKnsAIUQiTm4X8Oa0uzfUc0XPR4MpLISQnOpCmcrIEsPEO3Ij%2B2IS7ksPVA%2BN4PWp85zTPG4eVbBdiLBCkp%2FRRUBtVH%2FNMeNERol4vMpltDBt7PeRu%2B4ObuUiFTM%2F3iyeOr6jtu0X4OnvvnhlHbCIjvLWW75f6ZPSW1W%2FEPVHGZ6T6EJCPL6%2BYfS0GF56RcJsgfiDUh17s4aZUsZpgUr42wUmMozw%3D%3D&response-content-type=application%2Foctet-stream&response-content-disposition=attachment%3B%20filename%3Deric-blanchard-final-verdict-default-webgl-43-addressable_content.zip",
+                        "md5sum": "38Rh2aU+wFdhMEqs1fcwgA==",
+                        "resumable": false,
+                        "size": 1665396
+                    }
+                ],
+                "key": "addressable_content",
+                "name": "Addressable Assets",
+                "primary": false,
+                "show_download": true
+            },
+            {
+                "files": [
+                    {
+                        "filename": "Default WebGL.zip",
+                        "href": "https://storage.googleapis.com/unitycloud-build-user-svc-live-build/200427%2F341ae301-9537-4099-9488-d827ce5e805d%2Fdefault-webgl-43%2FDefault%20WebGL.zip?GoogleAccessId=signurl-sa%40unity-cs-cloudbuild-prd.iam.gserviceaccount.com&Expires=1614996230&Signature=MdTcVGRs02T7zrb2S9OaNpU3nxmGerBLJBhTJ0nmnOrCO2ir7jZbBs5ZIZxcIRIxzZJIrV%2B%2FtoPe6qI66qp1CmHrjD6jacfyX3iXER2mGK7b83ogNVd3MkAF%2BrRHA3orxBXxfsIJE8INdRIrahYCah7eOy2xPjgro3eOKS938nw51PUsn66cgLl4nMBPhH0i8DY63SHRh4lnXSopCuPbg45gXI4eF06wUeO1ArjHpn1XEQtZHY8KJMoFBnlmNoEikgIkdWIfTiAdYdGUW%2Fg%2B0EOywd2%2B%2BsXaBJNgVms1U9GEwXn4vh5Ttzf6inVLUZIxJk92CjaVybgbTkZTNTggCQ%3D%3D&response-content-type=application%2Foctet-stream&response-content-disposition=attachment%3B%20filename%3Deric-blanchard-final-verdict-default-webgl-43.zip",
+                        "md5sum": "QgM7SF1g20PYGduNBvLKTA==",
+                        "resumable": false,
+                        "size": 31039286
+                    }
+                ],
+                "key": "primary",
+                "name": ".ZIP file",
+                "primary": true,
+                "show_download": true
+            }
+        ],
+        "dashboard_download": {
+            "href": "https://dashboard.unity3d.com/organizations/200427/projects/341ae301-9537-4099-9488-d827ce5e805d/cloud-build/buildtargets/default-webgl/builds/43/download/",
+            "method": "get"
+        },
+        "dashboard_download_direct": {
+            "href": "https://dashboard.unity3d.com/organizations/200427/projects/341ae301-9537-4099-9488-d827ce5e805d/cloud-build/buildtargets/default-webgl/builds/43/download/direct/",
+            "method": "get"
+        },
+        "dashboard_log": {
+            "href": "/organizations/200427/projects/341ae301-9537-4099-9488-d827ce5e805d/cloud-build/buildtargets/default-webgl/builds/43/log",
+            "method": "get"
+        },
+        "dashboard_project": {
+            "href": "/organizations/200427/projects/341ae301-9537-4099-9488-d827ce5e805d/cloud-build/history",
+            "method": "get"
+        },
+        "dashboard_summary": {
+            "href": "/organizations/200427/projects/341ae301-9537-4099-9488-d827ce5e805d/cloud-build/history",
+            "method": "get"
+        },
+        "dashboard_url": {
+            "href": "https://dashboard.unity3d.com",
+            "method": "get"
+        }
+    },
+    "local": false,
+    "orgForeignKey": "200427",
+    "platform": "webgl",
+    "platformName": "Web GL",
+    "projectGuid": "341ae301-9537-4099-9488-d827ce5e805d",
+    "projectName": "Final Verdict",
+    "scmType": "git",
+    "startedBy": "[Detected Changes]"
+}
