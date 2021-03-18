@@ -3,7 +3,7 @@ steps:
   args: ['go', 'version']
 - name: 'mirror.gcr.io/library/golang'
   args: ['go', 'test']
-  dir: '/'
+  dir: 'go/'
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['functions', 'deploy', '[go-_test]', '[--trigger-http]', '--runtime', 'go113', '--entry-point', '[HelloWorld]']
-  dir: '/'
+  dir: 'go/'
