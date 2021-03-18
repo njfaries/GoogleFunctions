@@ -20,7 +20,7 @@ func HelloWorld(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewDecoder(r.Body).Decode(&d); err != nil {
 		switch err {
 		case io.EOF:
-			fmt.Fprint(w, "Hello World!")
+			fmt.Fprint(w, "Hi World!")
 			return
 		default:
 			log.Printf("json.NewDecoder: %v", err)
