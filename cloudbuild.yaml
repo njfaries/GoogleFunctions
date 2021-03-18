@@ -5,5 +5,5 @@ steps:
   args: ['go', 'test']
   dir: 'go/'
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['functions', 'deploy', '[go-test]', '[--trigger-http]', '--runtime', 'go113', '--entry-point', '[HelloWorld]']
+  args: ['functions', 'deploy', 'go-test', '--trigger-http', '--runtime', 'go113', '--entry-point', 'HelloWorld']
   dir: 'go/'
