@@ -10,6 +10,26 @@ import (
 	"net/http"
 )
 
+type Links struct {
+	Url string `json:"dashboard_download_direct"`
+}
+
+type Hook struct {
+	LinkList Links `json:"links"`
+}
+
+func Decode(w http.ResponseWriter, r *http.Request) {
+	hook := Hook{}
+	if err := json.NewDecoder(r.Body).Decode(&hook); err != nil {
+		log.Printf("error occured: %v", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+	}
+
+	url := ExtractUrl(hook)
+
+	log.Print(url)
+}
+
 // HelloWorld prints the JSON encoded "message" field in the body
 // of the request or "Hello, World!" if there isn't one.
 func HelloWorld(w http.ResponseWriter, r *http.Request) {
@@ -34,4 +54,8 @@ func HelloWorld(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Fprint(w, html.EscapeString(d.Message))
+}
+
+func ExtractUrl(request Hook) string {
+	return request.LinkList.Url
 }
