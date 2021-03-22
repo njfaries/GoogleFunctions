@@ -10,8 +10,13 @@ import (
 	"net/http"
 )
 
+type Href struct {
+	Url    string `json:"href"`
+	Method string `json:"method"`
+}
+
 type Links struct {
-	Url string `json:"dashboard_download_direct"`
+	Url Href `json:"dashboard_download_direct"`
 }
 
 type Hook struct {

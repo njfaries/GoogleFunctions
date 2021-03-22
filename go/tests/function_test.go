@@ -18,7 +18,10 @@ var _ = Describe("Webhook", func() {
 		testUrl = "https://www.test.url"
 		testHook = p.Hook{
 			LinkList: p.Links{
-				Url: testUrl,
+				Url: p.Href{
+					Url:    testUrl,
+					Method: "get",
+				},
 			},
 		}
 	})
