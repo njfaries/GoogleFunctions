@@ -62,5 +62,5 @@ func HelloWorld(w http.ResponseWriter, r *http.Request) {
 }
 
 func ExtractUrl(request Hook) string {
-	return request.LinkList.Url
+	return request.LinkList.Url.Url
 }
