@@ -3,6 +3,7 @@ package p
 
 import (
 	"encoding/json"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -33,15 +34,6 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
-	spaces, err := client.ListBuckets()
-	if err != nil {
-		log.Printf("error fetching buckets: %v", err)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-	}
-
-	for _, space := range spaces {
-		log.Printf("Space: %v", space.Name)
-	}
 	hook := Hook{}
 	if err := json.NewDecoder(r.Body).Decode(&hook); err != nil {
 		log.Printf("error occured: %v", err)
@@ -50,10 +42,43 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 
 	url := ExtractUrl(hook)
 
-	log.Print(url)
+	if err := Download(url); err != nil {
+		log.Printf("error occured while downloading: %v", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+	}
+
+	opts := minio.PutObjectOptions{}
+	uploadInfo, err := client.FPutObject("deleptualspace", "build", "build.zip", opts)
+	if err != nil {
+		log.Printf("error occured while uploading: %v", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+	}
+
+	log.Print("Successfully uploaded object: %v", uploadInfo)
 }
 
 //extract download_direct url
 func ExtractUrl(request Hook) string {
 	return request.LinkList.Url.Url
+}
+
+func Download(url string) error {
+	out, err := os.Create("build.zip")
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	_, err = io.Copy(out, resp.Body)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
