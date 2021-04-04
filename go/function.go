@@ -109,6 +109,7 @@ func Unzip(src string, dest string) ([]string, error) {
 
 	r, err := zip.OpenReader(src)
 	if err != nil {
+		log.Printf("File provided %s is not a valid zip file", src)
 		return filenames, err
 	}
 	defer r.Close()
