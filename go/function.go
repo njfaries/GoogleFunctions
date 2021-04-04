@@ -63,7 +63,7 @@ func ExtractUrl(request Hook) string {
 }
 
 func Download(url string) error {
-	out, err := os.Create("tmp/build.zip")
+	out, err := os.Create("/tmp/build.zip")
 	if err != nil {
 		return err
 	}
