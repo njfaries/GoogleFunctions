@@ -48,7 +48,7 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 	}
 
 	opts := minio.PutObjectOptions{}
-	uploadInfo, err := client.FPutObject("deleptualspace", "final-verdict-cicd-test/build", "tmp/build.zip", opts)
+	uploadInfo, err := client.FPutObject("deleptualspace", "final-verdict-cicd-test/build", "/tmp/build.zip", opts)
 	if err != nil {
 		log.Printf("error occured while uploading: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
