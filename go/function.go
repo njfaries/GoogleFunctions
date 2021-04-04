@@ -54,7 +54,7 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
-	log.Print("Successfully uploaded object: %v", uploadInfo)
+	log.Printf("Successfully uploaded object: %v", uploadInfo)
 }
 
 //extract download_direct url
