@@ -21,7 +21,7 @@ type Href struct {
 }
 
 type Links struct {
-	Url Href `json:"dashboard_download_direct"`
+	Url Href `json:"api_self"`
 }
 
 type Hook struct {
