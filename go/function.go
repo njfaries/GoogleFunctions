@@ -28,6 +28,8 @@ type Hook struct {
 	LinkList Links `json:"links"`
 }
 
+const RootUrl = "https://build-api.cloud.unity3d.com"
+
 func Decode(w http.ResponseWriter, r *http.Request) {
 	accessKey := os.Getenv("accessKey")
 	secretKey := os.Getenv("secret")
@@ -44,7 +46,7 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
-	url := ExtractUrl(hook)
+	url := ConstructUrl(hook)
 
 	if err := Download(url); err != nil {
 		log.Printf("error occured while downloading: %v", err)
@@ -76,8 +78,9 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 }
 
 //extract download_direct url
-func ExtractUrl(request Hook) string {
-	return request.LinkList.Url.Url
+func ConstructUrl(request Hook) string {
+	url := request.LinkList.Url.Url
+	return RootUrl + url
 }
 
 func Download(url string) error {

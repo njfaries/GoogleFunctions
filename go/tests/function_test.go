@@ -8,18 +8,20 @@ import (
 
 var _ = Describe("Webhook", func() {
 	var (
-		request  string
-		testUrl  string
-		testHook p.Hook
+		request    string
+		testUrl    string
+		testApiUrl string
+		testHook   p.Hook
 	)
 
 	BeforeEach(func() {
 		request = "test string"
-		testUrl = "https://www.test.url"
+		testUrl = "https://build-api.cloud.unity3d.com/api/url"
+		testApiUrl = "/api/url"
 		testHook = p.Hook{
 			LinkList: p.Links{
 				Url: p.Href{
-					Url:    testUrl,
+					Url:    testApiUrl,
 					Method: "get",
 				},
 			},
@@ -31,8 +33,8 @@ var _ = Describe("Webhook", func() {
 			Expect(request).To(Equal("test string"))
 		})
 
-		It("Should extract url from webhook json", func() {
-			result := p.ExtractUrl(testHook)
+		It("Should build curl URL from webhook json", func() {
+			result := p.ConstructUrl(testHook)
 
 			Expect(result).To(Equal(testUrl))
 		})
