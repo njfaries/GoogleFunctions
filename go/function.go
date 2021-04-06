@@ -109,6 +109,8 @@ func GetDownloadUrl(url string) (string, error) {
 		return "", err
 	}
 
+	log.Printf("Download link: %v", downloadHook.LinkList.Download.Url)
+
 	return downloadHook.LinkList.Download.Url, nil
 }
 
