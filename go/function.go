@@ -21,11 +21,15 @@ type Href struct {
 }
 
 type Links struct {
-	Url Href `json:"api_self"`
+	Url      Href `json:"api_self"`
+	Download Href `json:"download_primary"`
 }
 
 type Hook struct {
 	LinkList Links `json:"links"`
+}
+
+type Request struct {
 }
 
 const RootUrl = "https://build-api.cloud.unity3d.com"
@@ -81,6 +85,31 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 func ConstructUrl(request Hook) string {
 	url := request.LinkList.Url.Url
 	return RootUrl + url
+}
+
+func GetDownloadUrl(url string) (string, error) {
+	unityAuthKey := os.Getenv("unityAuthKey")
+	reader := strings.NewReader("{Authentication: Basic " + unityAuthKey + "}")
+	request, err := http.NewRequest("GET", url, reader)
+	if err != nil {
+		return "", err
+	}
+
+	client := &http.Client{}
+	response, err := client.Do(request)
+	if err != nil {
+		return "", err
+	}
+
+	log.Printf("Response: %v", response)
+
+	downloadHook := Hook{}
+	if err := json.NewDecoder(response.Body).Decode(&downloadHook); err != nil {
+		log.Printf("error occured: %v", err)
+		return "", err
+	}
+
+	return downloadHook.LinkList.Download.Url, nil
 }
 
 func Download(url string) error {
