@@ -50,7 +50,11 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
-	url := ConstructUrl(hook)
+	url, err := GetDownloadUrl(ConstructUrl(hook))
+	if err != nil {
+		log.Printf("error occured while getting download url: %v", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+	}
 
 	if err := Download(url); err != nil {
 		log.Printf("error occured while downloading: %v", err)
