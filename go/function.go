@@ -93,8 +93,10 @@ func ConstructUrl(request Hook) string {
 
 func GetDownloadUrl(url string) (string, error) {
 	unityApiKey := os.Getenv("unityApiKey")
-	reader := strings.NewReader("{Content-Type: application/json, Authentication: Basic " + unityApiKey + "}")
-	request, err := http.NewRequest("GET", url, reader)
+	// reader := strings.NewReader("{Content-Type: application/json, Authentication: Basic " + unityApiKey + "}")
+	request, err := http.NewRequest("GET", url, nil)
+	request.Header.Add("Content-Type", "application/json")
+	request.Header.Add("Authentication", "Basic "+unityApiKey)
 	if err != nil {
 		return "", err
 	}
