@@ -63,7 +63,7 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 
 	files, err := Unzip("/tmp/build.zip", "/tmp/build")
 	if err != nil {
-		log.Printf("error occurde while unzipping: %v", err)
+		log.Printf("error occured while unzipping: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
@@ -92,8 +92,8 @@ func ConstructUrl(request Hook) string {
 }
 
 func GetDownloadUrl(url string) (string, error) {
-	unityAuthKey := os.Getenv("unityAuthKey")
-	reader := strings.NewReader("{Authentication: Basic " + unityAuthKey + "}")
+	unityApiKey := os.Getenv("unityApiKey")
+	reader := strings.NewReader("{Content-Type: application/json, Authentication: Basic " + unityApiKey + "}")
 	request, err := http.NewRequest("GET", url, reader)
 	if err != nil {
 		return "", err
