@@ -100,6 +100,7 @@ func GetDownloadUrl(url string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	log.Printf("Request: %v", request)
 
 	client := &http.Client{}
 	response, err := client.Do(request)
