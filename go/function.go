@@ -96,7 +96,7 @@ func GetDownloadUrl(url string) (string, error) {
 	// reader := strings.NewReader("{Content-Type: application/json, Authentication: Basic " + unityApiKey + "}")
 	request, err := http.NewRequest("GET", url, nil)
 	request.Header.Add("Content-Type", "application/json")
-	request.Header.Add("Authentication", "Basic "+unityApiKey)
+	request.Header.Add("Authorization", "Basic "+unityApiKey)
 	if err != nil {
 		return "", err
 	}
