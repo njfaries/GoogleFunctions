@@ -1,4 +1,4 @@
-package main
+package p
 
 import (
 	"archive/zip"
@@ -10,9 +10,9 @@ import (
 	"strings"
 )
 
-func main() {
-	Unzip(os.Args[1], os.Args[2])
-}
+// func main() {
+// 	Unzip(os.Args[1], os.Args[2])
+// }
 
 func Unzip(src string, dest string) ([]string, error) {
 
