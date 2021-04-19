@@ -65,7 +65,7 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 
 	opts := minio.PutObjectOptions{}
 	for _, f := range files {
-		log.Printf(f)
+		log.Printf("File being uploaded: %s", f)
 		_, err := client.FPutObject("deleptualspace", "final-verdict-cicd-test/build/"+f, f, opts)
 		if err != nil {
 			log.Printf("error occured while uploading: %v", err)
