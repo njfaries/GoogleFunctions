@@ -1,16 +1,12 @@
 // Package p contains an HTTP Cloud Function.
-package p
+package main
 
 import (
-	"archive/zip"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
-	"strings"
 
 	"github.com/minio/minio-go"
 )
@@ -69,6 +65,7 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 
 	opts := minio.PutObjectOptions{}
 	for _, f := range files {
+		log.Printf(f)
 		_, err := client.FPutObject("deleptualspace", "final-verdict-cicd-test/build/"+f, f, opts)
 		if err != nil {
 			log.Printf("error occured while uploading: %v", err)
@@ -144,59 +141,59 @@ func Download(url string) error {
 
 // Unzip will decompress a zip archive, moving all files and folders
 // within the zip file (parameter 1) to an output directory (parameter 2).
-func Unzip(src string, dest string) ([]string, error) {
+// func Unzip(src string, dest string) ([]string, error) {
 
-	var filenames []string
+// 	var filenames []string
 
-	r, err := zip.OpenReader(src)
-	if err != nil {
-		log.Printf("File provided %s is not a valid zip file", src)
-		return filenames, err
-	}
-	defer r.Close()
+// 	r, err := zip.OpenReader(src)
+// 	if err != nil {
+// 		log.Printf("File provided %s is not a valid zip file", src)
+// 		return filenames, err
+// 	}
+// 	defer r.Close()
 
-	for _, f := range r.File {
+// 	for _, f := range r.File {
 
-		// Store filename/path for returning and using later on
-		fpath := filepath.Join(dest, f.Name)
+// 		// Store filename/path for returning and using later on
+// 		fpath := filepath.Join(dest, f.Name)
 
-		// Check for ZipSlip. More Info: http://bit.ly/2MsjAWE
-		if !strings.HasPrefix(fpath, filepath.Clean(dest)+string(os.PathSeparator)) {
-			return filenames, fmt.Errorf("%s: illegal file path", fpath)
-		}
+// 		// Check for ZipSlip. More Info: http://bit.ly/2MsjAWE
+// 		if !strings.HasPrefix(fpath, filepath.Clean(dest)+string(os.PathSeparator)) {
+// 			return filenames, fmt.Errorf("%s: illegal file path", fpath)
+// 		}
 
-		filenames = append(filenames, fpath)
+// 		filenames = append(filenames, fpath)
 
-		if f.FileInfo().IsDir() {
-			// Make Folder
-			os.MkdirAll(fpath, os.ModePerm)
-			continue
-		}
+// 		if f.FileInfo().IsDir() {
+// 			// Make Folder
+// 			os.MkdirAll(fpath, os.ModePerm)
+// 			continue
+// 		}
 
-		// Make File
-		if err = os.MkdirAll(filepath.Dir(fpath), os.ModePerm); err != nil {
-			return filenames, err
-		}
+// 		// Make File
+// 		if err = os.MkdirAll(filepath.Dir(fpath), os.ModePerm); err != nil {
+// 			return filenames, err
+// 		}
 
-		outFile, err := os.OpenFile(fpath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
-		if err != nil {
-			return filenames, err
-		}
+// 		outFile, err := os.OpenFile(fpath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
+// 		if err != nil {
+// 			return filenames, err
+// 		}
 
-		rc, err := f.Open()
-		if err != nil {
-			return filenames, err
-		}
+// 		rc, err := f.Open()
+// 		if err != nil {
+// 			return filenames, err
+// 		}
 
-		_, err = io.Copy(outFile, rc)
+// 		_, err = io.Copy(outFile, rc)
 
-		// Close the file without defer to close before next iteration of loop
-		outFile.Close()
-		rc.Close()
+// 		// Close the file without defer to close before next iteration of loop
+// 		outFile.Close()
+// 		rc.Close()
 
-		if err != nil {
-			return filenames, err
-		}
-	}
-	return filenames, nil
-}
+// 		if err != nil {
+// 			return filenames, err
+// 		}
+// 	}
+// 	return filenames, nil
+// }
