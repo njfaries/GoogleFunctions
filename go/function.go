@@ -68,7 +68,7 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 	for _, f := range files {
 		log.Printf("File being uploaded: %s", f)
 		trimmedFilePath := strings.ReplaceAll(f, "/tmp/build/Default WebGL/", "")
-		_, err := client.FPutObject("deleptualspace", "final-verdict-cicd-test/build/"+trimmedFilePath, f, opts)
+		_, err := client.FPutObject("deleptualspace", "final-verdict-cicd-test/"+trimmedFilePath, f, opts)
 		if err != nil {
 			log.Printf("error occured while uploading: %v", err)
 			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
