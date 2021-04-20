@@ -10,9 +10,9 @@ import (
 	"strings"
 )
 
-// func main() {
-// 	Unzip(os.Args[1], os.Args[2])
-// }
+func main() {
+	Unzip(os.Args[1], os.Args[2])
+}
 
 func Unzip(src string, dest string) ([]string, error) {
 
@@ -30,9 +30,17 @@ func Unzip(src string, dest string) ([]string, error) {
 		// Store filename/path for returning and using later on
 		fpath := filepath.Join(dest, f.Name)
 
+		if strings.Contains(fpath, "Template") || strings.Contains(fpath, "index.html") {
+			continue
+		}
+
 		// Check for ZipSlip. More Info: http://bit.ly/2MsjAWE
 		if !strings.HasPrefix(fpath, filepath.Clean(dest)+string(os.PathSeparator)) {
 			return filenames, fmt.Errorf("%s: illegal file path", fpath)
+		}
+
+		if strings.Contains(fpath, "Build/") {
+			fpath = strings.ReplaceAll(fpath, "Build/", "")
 		}
 
 		filenames = append(filenames, fpath)

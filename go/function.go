@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/minio/minio-go"
 )
@@ -66,7 +67,8 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 	opts := minio.PutObjectOptions{}
 	for _, f := range files {
 		log.Printf("File being uploaded: %s", f)
-		_, err := client.FPutObject("deleptualspace", "final-verdict-cicd-test/build/"+f, f, opts)
+		trimmedFilePath := strings.ReplaceAll(f, "/tmp/build/Default WebGL/", "")
+		_, err := client.FPutObject("deleptualspace", "final-verdict-cicd-test/build/"+trimmedFilePath, f, opts)
 		if err != nil {
 			log.Printf("error occured while uploading: %v", err)
 			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
