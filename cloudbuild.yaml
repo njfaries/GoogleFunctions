@@ -1,7 +1,7 @@
 steps:
-- name: 'mirror.gcr.io/library/golang'
+- name: 'registry.hub.docker.com/library/golang'
   args: ['go', 'version']
-- name: 'mirror.gcr.io/library/golang'
+- name: 'registry.hub.docker.com/library/golang'
   args: ['go', 'test']
   dir: 'go/'
 - name: 'gcr.io/cloud-builders/gcloud'
