@@ -11,10 +11,10 @@ import (
 )
 
 func main() {
-	Unzip(os.Args[1], os.Args[2])
+	Unzip(os.Args[1], os.Args[2], false)
 }
 
-func Unzip(src string, dest string) ([]string, error) {
+func Unzip(src string, dest string, assets bool) ([]string, error) {
 
 	var filenames []string
 
@@ -30,17 +30,25 @@ func Unzip(src string, dest string) ([]string, error) {
 		// Store filename/path for returning and using later on
 		fpath := filepath.Join(dest, f.Name)
 
-		if strings.Contains(fpath, "Template") || strings.Contains(fpath, "index.html") {
-			continue
+		if assets {
+			if strings.Contains(fpath, "Assets/") || strings.Contains(fpath, "Library/") {
+				continue
+			}
+
+		} else {
+			if strings.Contains(fpath, "Template") || strings.Contains(fpath, "index.html") {
+				continue
+			}
+
+			if strings.Contains(fpath, "Build/") {
+				fpath = strings.ReplaceAll(fpath, "Build/", "")
+			}
+
 		}
 
 		// Check for ZipSlip. More Info: http://bit.ly/2MsjAWE
 		if !strings.HasPrefix(fpath, filepath.Clean(dest)+string(os.PathSeparator)) {
 			return filenames, fmt.Errorf("%s: illegal file path", fpath)
-		}
-
-		if strings.Contains(fpath, "Build/") {
-			fpath = strings.ReplaceAll(fpath, "Build/", "")
 		}
 
 		filenames = append(filenames, fpath)

@@ -17,9 +17,14 @@ type Href struct {
 	Method string `json:"method"`
 }
 
+type Artifact struct {
+	Files Href `json:"files"`
+}
+
 type Links struct {
-	Url      Href `json:"api_self"`
-	Download Href `json:"download_primary"`
+	Url       Href     `json:"api_self"`
+	Artifacts Artifact `json:"artifacts"`
+	Download  Href     `json:"download_primary"`
 }
 
 type Hook struct {
@@ -53,14 +58,27 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
+	if err := Download(GetAssetUrl(hook)); err != nil {
+		log.Printf("error occured while downloading assets: %v", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+	}
+
 	if err := Download(url); err != nil {
 		log.Printf("error occured while downloading: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
-	files, err := Unzip("/tmp/build.zip", "/tmp/build")
+	//Unzip build data
+	files, err := Unzip("/tmp/build.zip", "/tmp/build", false)
 	if err != nil {
 		log.Printf("error occured while unzipping: %v", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+	}
+
+	//Unzip asset data
+	assets, err := Unzip("/tmp/assets.zip", "/tmp/assets", true)
+	if err != nil {
+		log.Printf("error occured while unzipping assets: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
@@ -75,12 +93,27 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 		}
 
 	}
+
+	for _, f := range assets {
+		log.Printf("File being uploaded: %s", f)
+		trimmedFilePath := strings.ReplaceAll(f, "/tmp/assets/ServerData/", "")
+		_, err := client.FPutObject("monikerspace", "final-verdict-cicd-test/"+trimmedFilePath, f, opts)
+		if err != nil {
+			log.Printf("error occured while uploading assets: %v", err)
+			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		}
+	}
 }
 
 //extract download_direct url
 func ConstructUrl(request Hook) string {
 	url := request.LinkList.Url.Url
 	return RootUrl + url
+}
+
+func GetAssetUrl(request Hook) string {
+	url := request.LinkList.Artifacts.Files.Url
+	return url
 }
 
 func GetDownloadUrl(url string) (string, error) {
