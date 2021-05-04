@@ -57,14 +57,13 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
-	url, err := GetDownloadUrl(ConstructUrl(hook))
-	if err != nil {
-		log.Printf("error occured while getting download url: %v", err)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-	}
+	// url, err := GetDownloadUrl(ConstructUrl(hook))
+	// if err != nil {
+	// 	log.Printf("error occured while getting download url: %v", err)
+	// 	http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+	// }
 
-	newGetDownloadUrl(hook)
-	if err := Download(url, false); err != nil {
+	if err := Download(GetDownloadUrl(hook), false); err != nil {
 		log.Printf("error occured while downloading build data: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
@@ -107,7 +106,7 @@ func ConstructUrl(request Hook) string {
 	return RootUrl + url
 }
 
-func newGetDownloadUrl(request Hook) string {
+func GetDownloadUrl(request Hook) string {
 	url := request.LinkList.Artifacts[1].Files[0].Url
 	log.Printf("Download URL with new method: %s", url)
 	return url
@@ -118,35 +117,35 @@ func GetAssetUrl(request Hook) string {
 	return url
 }
 
-func GetDownloadUrl(url string) (string, error) {
-	unityApiKey := os.Getenv("unityApiKey")
-	// reader := strings.NewReader("{Content-Type: application/json, Authentication: Basic " + unityApiKey + "}")
-	request, err := http.NewRequest("GET", url, nil)
-	request.Header.Add("Content-Type", "application/json")
-	request.Header.Add("Authorization", "Basic "+unityApiKey)
-	if err != nil {
-		return "", err
-	}
-	log.Printf("Request: %v", request)
+// func GetDownloadUrl(url string) (string, error) {
+// 	unityApiKey := os.Getenv("unityApiKey")
+// 	// reader := strings.NewReader("{Content-Type: application/json, Authentication: Basic " + unityApiKey + "}")
+// 	request, err := http.NewRequest("GET", url, nil)
+// 	request.Header.Add("Content-Type", "application/json")
+// 	request.Header.Add("Authorization", "Basic "+unityApiKey)
+// 	if err != nil {
+// 		return "", err
+// 	}
+// 	log.Printf("Request: %v", request)
 
-	client := &http.Client{}
-	response, err := client.Do(request)
-	if err != nil {
-		return "", err
-	}
+// 	client := &http.Client{}
+// 	response, err := client.Do(request)
+// 	if err != nil {
+// 		return "", err
+// 	}
 
-	log.Printf("Response: %v", response)
+// 	log.Printf("Response: %v", response)
 
-	downloadHook := Hook{}
-	if err := json.NewDecoder(response.Body).Decode(&downloadHook); err != nil {
-		log.Printf("error occured: %v", err)
-		return "", err
-	}
+// 	downloadHook := Hook{}
+// 	if err := json.NewDecoder(response.Body).Decode(&downloadHook); err != nil {
+// 		log.Printf("error occured: %v", err)
+// 		return "", err
+// 	}
 
-	log.Printf("Download link with old method: %v", downloadHook.LinkList.Download.Url)
+// 	log.Printf("Download link with old method: %v", downloadHook.LinkList.Download.Url)
 
-	return downloadHook.LinkList.Download.Url, nil
-}
+// 	return downloadHook.LinkList.Download.Url, nil
+// }
 
 func Download(url string, isAssets bool) error {
 	var out *os.File
