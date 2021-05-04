@@ -17,15 +17,19 @@ type Href struct {
 	Method string `json:"method"`
 }
 
+type File struct {
+	Filename string `json:"filename"`
+	Url      string `json:"href"`
+}
+
 type Artifact struct {
-	Files Href `json:"files[0]"`
+	Files []File `json:"files"`
 }
 
 type Links struct {
-	Url       Href     `json:"api_self"`
-	Artifacts Artifact `json:"artifacts[0]"`
-	Test      Artifact `json:"artifacts[1]"`
-	Download  Href     `json:"download_primary"`
+	Url       Href       `json:"api_self"`
+	Artifacts []Artifact `json:"artifacts"`
+	Download  Href       `json:"download_primary"`
 }
 
 type Hook struct {
