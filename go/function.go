@@ -58,12 +58,12 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
-	if err := Download(GetAssetUrl(hook)); err != nil {
+	if err := Download(GetAssetUrl(hook), true); err != nil {
 		log.Printf("error occured while downloading assets: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
-	if err := Download(url); err != nil {
+	if err := Download(url, false); err != nil {
 		log.Printf("error occured while downloading: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
@@ -136,8 +136,14 @@ func GetDownloadUrl(url string) (string, error) {
 	return downloadHook.LinkList.Download.Url, nil
 }
 
-func Download(url string) error {
-	out, err := os.Create("/tmp/build.zip")
+func Download(url string, isAssets bool) error {
+	var out *os.File
+	var err error
+	if isAssets {
+		out, err = os.Create("/tmp/assets.zip")
+	} else {
+		out, err = os.Create("/tmp/build.zip")
+	}
 	if err != nil {
 		return err
 	}
