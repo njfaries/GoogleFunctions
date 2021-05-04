@@ -103,6 +103,8 @@ func ConstructUrl(request Hook) string {
 
 func GetAssetUrl(request Hook) string {
 	url := request.LinkList.Artifacts.Files.Url
+	log.Printf("request.LinkList.Artifacts: %v", request.LinkList.Artifacts)
+	log.Printf("request.LinkList.Artifacts.Files: %v", request.LinkList.Artifacts.Files)
 	return url
 }
 
