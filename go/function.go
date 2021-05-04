@@ -18,12 +18,12 @@ type Href struct {
 }
 
 type Artifact struct {
-	Files Href `json:"files"`
+	Files Href `json:"files[0]"`
 }
 
 type Links struct {
 	Url       Href     `json:"api_self"`
-	Artifacts Artifact `json:"artifacts"`
+	Artifacts Artifact `json:"artifacts[0]"`
 	Download  Href     `json:"download_primary"`
 }
 
