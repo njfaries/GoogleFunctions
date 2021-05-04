@@ -57,13 +57,14 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
-	// url, err := GetDownloadUrl(ConstructUrl(hook))
-	// if err != nil {
-	// 	log.Printf("error occured while getting download url: %v", err)
-	// 	http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-	// }
+	url, err := GetDownloadUrl(ConstructUrl(hook))
+	if err != nil {
+		log.Printf("error occured while getting download url: %v", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+	}
 
-	if err := Download(newGetDownloadUrl(hook), false); err != nil {
+	newGetDownloadUrl(hook)
+	if err := Download(url, false); err != nil {
 		log.Printf("error occured while downloading build data: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
@@ -142,7 +143,7 @@ func GetDownloadUrl(url string) (string, error) {
 		return "", err
 	}
 
-	log.Printf("Download link: %v", downloadHook.LinkList.Download.Url)
+	log.Printf("Download link with old method: %v", downloadHook.LinkList.Download.Url)
 
 	return downloadHook.LinkList.Download.Url, nil
 }
