@@ -57,9 +57,14 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
-	url, err := GetDownloadUrl(ConstructUrl(hook))
-	if err != nil {
-		log.Printf("error occured while getting download url: %v", err)
+	// url, err := GetDownloadUrl(ConstructUrl(hook))
+	// if err != nil {
+	// 	log.Printf("error occured while getting download url: %v", err)
+	// 	http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+	// }
+
+	if err := Download(newGetDownloadUrl(hook), false); err != nil {
+		log.Printf("error occured while downloading build data: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
@@ -68,15 +73,10 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
-	if err := Download(url, false); err != nil {
-		log.Printf("error occured while downloading: %v", err)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-	}
-
 	//Unzip build data
 	files, err := Unzip("/tmp/build.zip", "/tmp/build", false)
 	if err != nil {
-		log.Printf("error occured while unzipping: %v", err)
+		log.Printf("error occured while unzipping build data: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
@@ -106,11 +106,14 @@ func ConstructUrl(request Hook) string {
 	return RootUrl + url
 }
 
+func newGetDownloadUrl(request Hook) string {
+	url := request.LinkList.Artifacts[1].Files[0].Url
+	log.Printf("Download URL with new method: %s", url)
+	return url
+}
+
 func GetAssetUrl(request Hook) string {
 	url := request.LinkList.Artifacts[0].Files[0].Url
-	log.Printf("request.LinkList: %v", request.LinkList)
-	log.Printf("request.LinkList.Artifacts: %v", request.LinkList.Artifacts)
-	log.Printf("request.LinkList.Artifacts.Files: %v", request.LinkList.Artifacts[0].Files[0])
 	return url
 }
 
