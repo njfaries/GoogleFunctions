@@ -144,6 +144,9 @@ func Download(url string, isAssets bool) error {
 	} else {
 		out, err = os.Create("/tmp/build.zip")
 	}
+	log.Printf("isAssets is %v", isAssets)
+	log.Printf("Getting from url: %s", url)
+
 	if err != nil {
 		return err
 	}
