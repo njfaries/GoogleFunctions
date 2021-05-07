@@ -51,6 +51,8 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 		log.Printf("error creating client: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
+	log.Printf("Dumping json body")
+	log.Print(r.Body)
 
 	hook := Hook{}
 	if err := json.NewDecoder(r.Body).Decode(&hook); err != nil {
@@ -58,7 +60,7 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
-	log.Printf("Dumping json")
+	log.Printf("Dumping hook")
 	log.Print(hook)
 
 	formattedName := FormatName(hook.ProjectName)
