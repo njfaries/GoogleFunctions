@@ -90,13 +90,13 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//Upload build data
-	if err := Upload(files, "/tmp/build/Default WebGL/", "final-verdict-cicd-test/", "deleptualspace", client); err != nil {
+	if err := Upload(files, "/tmp/build/webgl/", "dev/"+formattedName, "deleptualspace", client); err != nil {
 		log.Printf("error occured while uploading build data: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
 	//Upload assets
-	if err := Upload(assets, "/tmp/assets/ServerData/", "final-verdict-cicd-test/", "monikerspace", client); err != nil {
+	if err := Upload(assets, "/tmp/assets/ServerData/", "dev/"+formattedName+"/WebGL", "deleptualspace", client); err != nil {
 		log.Printf("error occured while uploading assets: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
@@ -118,36 +118,6 @@ func GetAssetUrl(request Hook) string {
 	url := request.LinkList.Artifacts[0].Files[0].Url
 	return url
 }
-
-// func GetDownloadUrl(url string) (string, error) {
-// 	unityApiKey := os.Getenv("unityApiKey")
-// 	// reader := strings.NewReader("{Content-Type: application/json, Authentication: Basic " + unityApiKey + "}")
-// 	request, err := http.NewRequest("GET", url, nil)
-// 	request.Header.Add("Content-Type", "application/json")
-// 	request.Header.Add("Authorization", "Basic "+unityApiKey)
-// 	if err != nil {
-// 		return "", err
-// 	}
-// 	log.Printf("Request: %v", request)
-
-// 	client := &http.Client{}
-// 	response, err := client.Do(request)
-// 	if err != nil {
-// 		return "", err
-// 	}
-
-// 	log.Printf("Response: %v", response)
-
-// 	downloadHook := Hook{}
-// 	if err := json.NewDecoder(response.Body).Decode(&downloadHook); err != nil {
-// 		log.Printf("error occured: %v", err)
-// 		return "", err
-// 	}
-
-// 	log.Printf("Download link with old method: %v", downloadHook.LinkList.Download.Url)
-
-// 	return downloadHook.LinkList.Download.Url, nil
-// }
 
 func Download(url string, isAssets bool) error {
 	var out *os.File
@@ -193,5 +163,7 @@ func Upload(files []string, src string, dest string, space string, client *minio
 }
 
 func FormatName(name string) string {
+	name = strings.ReplaceAll(name, " ", "-")
+	name = strings.ToLower(name)
 	return name
 }
