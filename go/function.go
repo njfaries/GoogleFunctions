@@ -58,6 +58,7 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
+	formattedName := FormatName(hook.ProjectName)
 	// url, err := GetDownloadUrl(ConstructUrl(hook))
 	// if err != nil {
 	// 	log.Printf("error occured while getting download url: %v", err)
@@ -189,4 +190,8 @@ func Upload(files []string, src string, dest string, space string, client *minio
 		}
 	}
 	return nil
+}
+
+func FormatName(name string) string {
+	return name
 }
