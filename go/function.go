@@ -58,6 +58,9 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
+	log.Printf("Dumping json")
+	log.Print(hook)
+
 	formattedName := FormatName(hook.ProjectName)
 	// url, err := GetDownloadUrl(ConstructUrl(hook))
 	// if err != nil {
