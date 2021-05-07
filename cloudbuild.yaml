@@ -7,3 +7,6 @@ steps:
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['functions', 'deploy', 'go-test', '--trigger-http', '--runtime', 'go113', '--entry-point', 'Decode']
   dir: 'go/'
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['functions', 'deploy', 'cicd', '--trigger-http', '--runtime', 'go113', '--entry-point', 'Decode']
+  dir: 'go/'
