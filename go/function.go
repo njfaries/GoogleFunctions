@@ -33,7 +33,8 @@ type Links struct {
 }
 
 type Hook struct {
-	LinkList Links `json:"links"`
+	LinkList    Links  `json:"links"`
+	ProjectName string `json:"projectName"`
 }
 
 type Request struct {
