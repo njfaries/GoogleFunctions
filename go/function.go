@@ -4,7 +4,6 @@ package p
 import (
 	"encoding/json"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -52,25 +51,27 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 		log.Printf("error creating client: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
-	log.Printf("Dumping json body")
-	body, _ := ioutil.ReadAll(r.Body)
-	log.Print(string(body))
+	// log.Printf("Dumping json body")
+	// body, _ := ioutil.ReadAll(r.Body)
+	// log.Print(string(body))
 
 	hook := Hook{}
+	log.Print("Reading hook...")
 	if err := json.NewDecoder(r.Body).Decode(&hook); err != nil {
 		log.Printf("error occured: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
-	log.Printf("Dumping hook")
-	log.Print(hook)
+	log.Print("Finished reading hook")
+
+	// log.Printf("Dumping hook")
+	// log.Print(hook)
+
+	log.Print("Formatting name...")
 
 	formattedName := FormatName(hook.ProjectName)
-	// url, err := GetDownloadUrl(ConstructUrl(hook))
-	// if err != nil {
-	// 	log.Printf("error occured while getting download url: %v", err)
-	// 	http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-	// }
+
+	log.Printf("Name formatted as: %v", formattedName)
 
 	if err := Download(GetDownloadUrl(hook), false); err != nil {
 		log.Printf("error occured while downloading build data: %v", err)
