@@ -95,13 +95,13 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//Upload build data
-	if err := Upload(files, "/tmp/build/webgl/", "dev/"+formattedName, "deleptualspace", client); err != nil {
+	if err := Upload(files, "/tmp/build/webgl/", "dev/"+formattedName+"/", "deleptualspace", client); err != nil {
 		log.Printf("error occured while uploading build data: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
 	//Upload assets
-	if err := Upload(assets, "/tmp/assets/ServerData/", "dev/"+formattedName+"/WebGL", "deleptualspace", client); err != nil {
+	if err := Upload(assets, "/tmp/assets/ServerData/", "dev/"+formattedName+"/WebGL/", "deleptualspace", client); err != nil {
 		log.Printf("error occured while uploading assets: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
