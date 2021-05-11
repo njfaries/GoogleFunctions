@@ -158,7 +158,8 @@ func Download(url string, isAssets bool) error {
 }
 
 func Upload(files []string, src string, dest string, space string, client *minio.Client) error {
-	opts := minio.PutObjectOptions{}
+	userMetaData := map[string]string{"x-amz-acl": "public-read"}
+	opts := minio.PutObjectOptions{UserMetadata: userMetaData}
 	for _, f := range files {
 		log.Printf("Uploading file %s to %s", f, dest)
 		trimmedFilePath := strings.ReplaceAll(f, src, "")
