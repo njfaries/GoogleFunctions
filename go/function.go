@@ -108,6 +108,10 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 		log.Printf("error occured while uploading assets: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
+
+	//Purge CDN
+	//Just a logging statement for now
+	PurgeCdn()
 }
 
 //extract download_direct url
@@ -176,4 +180,12 @@ func FormatName(name string) string {
 	name = strings.ReplaceAll(name, " ", "-")
 	name = strings.ToLower(name)
 	return name
+}
+
+func PurgeCdn() {
+	client := &http.Client{}
+	req, _ := http.NewRequest("GET", "https://api.digitalocean.com/v2/cdn/endpoints", nil)
+	req.Header.Set("origin", "cdn.test.deleptual.ca")
+	resp, _ := client.Do(req)
+	log.Printf("Response: %v", resp)
 }
