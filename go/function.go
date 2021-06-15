@@ -111,7 +111,7 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 
 	//Purge CDN
 	//Just a logging statement for now
-	PurgeCdn()
+	// PurgeCdn()
 }
 
 //extract download_direct url
