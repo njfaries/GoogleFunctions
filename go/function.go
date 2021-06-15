@@ -185,7 +185,9 @@ func FormatName(name string) string {
 func PurgeCdn() {
 	client := &http.Client{}
 	req, _ := http.NewRequest("GET", "https://api.digitalocean.com/v2/cdn/endpoints", nil)
-	req.Header.Set("origin", "cdn.test.deleptual.ca")
+	req.Header.Set("Content-Type", "application/json")
+	oceanToken := os.Getenv("oceanToken")
+	req.Header.Set("Authorization", "Bearer "+oceanToken)
 	resp, _ := client.Do(req)
 	log.Printf("Response: %v", resp)
 }
