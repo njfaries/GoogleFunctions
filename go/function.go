@@ -189,5 +189,6 @@ func PurgeCdn() {
 	oceanToken := os.Getenv("oceanToken")
 	req.Header.Set("Authorization", "Bearer "+oceanToken)
 	resp, _ := client.Do(req)
-	log.Printf("Response: %v", resp)
+	log.Printf("Response: %v", resp.Body)
+	defer resp.Body.Close()
 }
