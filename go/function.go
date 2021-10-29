@@ -162,7 +162,7 @@ func Download(url string, isAssets bool) error {
 }
 
 func Upload(files []string, src string, dest string, space string, client *minio.Client) error {
-	userMetaData := map[string]string{"x-amz-acl": "public-read"}
+	userMetaData := map[string]string{"x-amz-acl": "public-read", "content-type": "application/xml", "content-encoding": "gzip"}
 	opts := minio.PutObjectOptions{UserMetadata: userMetaData}
 	for _, f := range files {
 		log.Printf("Uploading file %s to %s", f, dest)
