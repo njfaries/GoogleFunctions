@@ -4,7 +4,6 @@ package p
 import (
 	"encoding/json"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -52,9 +51,9 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 		log.Printf("error creating client: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
-	log.Printf("Dumping json body")
-	body, _ := ioutil.ReadAll(r.Body)
-	log.Print(string(body))
+	// log.Printf("Dumping json body")
+	// body, _ := ioutil.ReadAll(r.Body)
+	// log.Print(string(body))
 
 	hook := Hook{}
 	log.Print("Reading hook...")
