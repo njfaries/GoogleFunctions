@@ -44,6 +44,10 @@ func Unzip(src string, dest string, assets bool) ([]string, error) {
 				fpath = strings.ReplaceAll(fpath, "Build/", "")
 			}
 
+			if strings.Contains(fpath, ".gz") {
+				fpath = strings.ReplaceAll(fpath, ".gz", "")
+			}
+
 		}
 
 		// Check for ZipSlip. More Info: http://bit.ly/2MsjAWE

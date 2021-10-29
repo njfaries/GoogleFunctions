@@ -3,6 +3,7 @@ package p
 
 import (
 	"encoding/json"
+	"errors"
 	"io"
 	"log"
 	"net/http"
@@ -164,11 +165,17 @@ func Download(url string, isAssets bool) error {
 func Upload(files []string, src string, dest string, space string, client *minio.Client) error {
 	userMetaData := map[string]string{"x-amz-acl": "public-read"}
 	opts := minio.PutObjectOptions{UserMetadata: userMetaData, ContentType: "application/xml", ContentEncoding: "gzip"}
+	jsOpts := minio.PutObjectOptions{UserMetadata: userMetaData, ContentType: "application/javascript"}
 	for _, f := range files {
 		log.Printf("Uploading file %s to %s", f, dest)
 		trimmedFilePath := strings.ReplaceAll(f, src, "")
 		log.Printf("Trimmed path for this file: %s", trimmedFilePath)
-		_, err := client.FPutObject(space, dest+trimmedFilePath, f, opts)
+		err := errors.New("declaring")
+		if trimmedFilePath == "webgl.loader.js" {
+			_, err = client.FPutObject(space, dest+trimmedFilePath, f, jsOpts)
+		} else {
+			_, err = client.FPutObject(space, dest+trimmedFilePath, f, opts)
+		}
 		if err != nil {
 			return err
 		}
