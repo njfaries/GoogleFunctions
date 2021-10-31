@@ -171,10 +171,10 @@ func Upload(files []string, src string, dest string, space string, client *minio
 		trimmedFilePath := strings.ReplaceAll(f, src, "")
 		log.Printf("Trimmed path for this file: %s", trimmedFilePath)
 		err := errors.New("declaring")
-		if trimmedFilePath == "webgl.loader.js" {
-			_, err = client.FPutObject(space, dest+trimmedFilePath, f, jsOpts)
-		} else {
+		if (trimmedFilePath == "webgl.data" || trimmedFilePath == "webgl.framework.js" || trimmedFilePath == "webgl.wasm") {
 			_, err = client.FPutObject(space, dest+trimmedFilePath, f, opts)
+		} else {
+			_, err = client.FPutObject(space, dest+trimmedFilePath, f, jsOpts)
 		}
 		if err != nil {
 			return err
