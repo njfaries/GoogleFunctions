@@ -73,7 +73,9 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("Name formatted as: %v", formattedName)
 
-	if err := Download(GetDownloadUrl(hook), false); err != nil {
+	assetsIncluded := len(hook.LinkList.Artifacts) == 2
+
+	if err := Download(GetDownloadUrl(hook, assetsIncluded), false); err != nil {
 		log.Printf("error occured while downloading build data: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
@@ -120,8 +122,13 @@ func ConstructUrl(request Hook) string {
 	return RootUrl + url
 }
 
-func GetDownloadUrl(request Hook) string {
-	url := request.LinkList.Artifacts[1].Files[0].Url
+func GetDownloadUrl(request Hook, assetsIncluded bool) string {
+	var url string
+	if assetsIncluded {
+		url = request.LinkList.Artifacts[1].Files[0].Url
+	} else {
+		url = request.LinkList.Artifacts[0].Files[0].Url
+	}
 	log.Printf("Download URL with new method: %s", url)
 	return url
 }
