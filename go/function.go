@@ -80,22 +80,10 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
-	if err := Download(GetAssetUrl(hook), true); err != nil {
-		log.Printf("error occured while downloading assets: %v", err)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-	}
-
 	//Unzip build data
 	files, err := Unzip("/tmp/build.zip", "/tmp/build", false)
 	if err != nil {
 		log.Printf("error occured while unzipping build data: %v", err)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-	}
-
-	//Unzip asset data
-	assets, err := Unzip("/tmp/assets.zip", "/tmp/assets", true)
-	if err != nil {
-		log.Printf("error occured while unzipping assets: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
@@ -105,10 +93,24 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
-	//Upload assets
-	if err := Upload(assets, "/tmp/assets/ServerData/", "dev/"+formattedName+"/", "deleptualspace", client); err != nil {
-		log.Printf("error occured while uploading assets: %v", err)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+	if assetsIncluded {
+		if err := Download(GetAssetUrl(hook), true); err != nil {
+			log.Printf("error occured while downloading assets: %v", err)
+			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		}
+
+		//Unzip asset data
+		assets, err := Unzip("/tmp/assets.zip", "/tmp/assets", true)
+		if err != nil {
+			log.Printf("error occured while unzipping assets: %v", err)
+			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		}
+
+		//Upload assets
+		if err := Upload(assets, "/tmp/assets/ServerData/", "dev/"+formattedName+"/", "deleptualspace", client); err != nil {
+			log.Printf("error occured while uploading assets: %v", err)
+			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		}
 	}
 
 	//Purge CDN
