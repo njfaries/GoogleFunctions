@@ -74,13 +74,10 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("Name formatted as: %v", formattedName)
 
-	if err := Download(GetDownloadUrl(hook), false); err != nil {
-		log.Printf("error occured while downloading build data: %v", err)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-	}
+	assetsIncluded := len(hook.LinkList.Artifacts) == 2
 
-	if err := Download(GetAssetUrl(hook), true); err != nil {
-		log.Printf("error occured while downloading assets: %v", err)
+	if err := Download(GetDownloadUrl(hook, assetsIncluded), false); err != nil {
+		log.Printf("error occured while downloading build data: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
@@ -91,23 +88,30 @@ func Decode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
-	//Unzip asset data
-	assets, err := Unzip("/tmp/assets.zip", "/tmp/assets", true)
-	if err != nil {
-		log.Printf("error occured while unzipping assets: %v", err)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-	}
-
 	//Upload build data
 	if err := Upload(files, "/tmp/build/webgl/", "dev/"+formattedName+"/", "deleptualspace", client); err != nil {
 		log.Printf("error occured while uploading build data: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
-	//Upload assets
-	if err := Upload(assets, "/tmp/assets/ServerData/", "dev/"+formattedName+"/", "deleptualspace", client); err != nil {
-		log.Printf("error occured while uploading assets: %v", err)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+	if assetsIncluded {
+		if err := Download(GetAssetUrl(hook), true); err != nil {
+			log.Printf("error occured while downloading assets: %v", err)
+			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		}
+
+		//Unzip asset data
+		assets, err := Unzip("/tmp/assets.zip", "/tmp/assets", true)
+		if err != nil {
+			log.Printf("error occured while unzipping assets: %v", err)
+			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		}
+
+		//Upload assets
+		if err := Upload(assets, "/tmp/assets/ServerData/", "dev/"+formattedName+"/", "deleptualspace", client); err != nil {
+			log.Printf("error occured while uploading assets: %v", err)
+			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		}
 	}
 
 	//Purge CDN
@@ -121,8 +125,13 @@ func ConstructUrl(request Hook) string {
 	return RootUrl + url
 }
 
-func GetDownloadUrl(request Hook) string {
-	url := request.LinkList.Artifacts[1].Files[0].Url
+func GetDownloadUrl(request Hook, assetsIncluded bool) string {
+	var url string
+	if assetsIncluded {
+		url = request.LinkList.Artifacts[1].Files[0].Url
+	} else {
+		url = request.LinkList.Artifacts[0].Files[0].Url
+	}
 	log.Printf("Download URL with new method: %s", url)
 	return url
 }
